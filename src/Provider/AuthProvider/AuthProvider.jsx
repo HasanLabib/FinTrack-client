@@ -20,18 +20,35 @@ const AuthProvider = ({ children }) => {
     setUserLoading(true);
     // return createUserWithEmailAndPassword(auth, email, password);
     try {
-
       const res = await axios.post("/register", userData);
 
       const { firebaseToken } = res.data;
       const userCredential = await signInWithCustomToken(auth, firebaseToken);
+      const firebaseUser = auth.currentUser;
+      setUser({
+        ...firebaseUser,
+        role: userCredential.data.user.role,
+        photo: userCredential.data.user.photo,
+        id: userCredential.data.user.id,
+      });
       return userCredential;
     } finally {
       console.log("hello");
     }
   };
-  const signInUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const signInUser = async ({ email, password }) => {
+    //return signInWithEmailAndPassword(auth, email, password);
+
+    const res = await axios.post("/login", { email, password });
+    const { firebaseToken, user: backendUser } = res.data;
+    const userCredential = await signInWithCustomToken(auth, firebaseToken);
+    const firebaseUser = auth.currentUser;
+
+    setUser({
+      ...firebaseUser,
+      ...backendUser,
+    });
+    return userCredential;
   };
 
   useEffect(() => {
