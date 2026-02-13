@@ -10,7 +10,8 @@ import UserDashBoard from "../Pages/DashBoard/UserDashBoard/UserDashBoard";
 import AdminDashBoard from "../Pages/DashBoard/AdminDashboard/AdminDashBoard";
 import RoleBasedRedirect from "../Pages/DashBoard/RoleBasedRedirect";
 import CategoryMakeAdmin from "../Component/CategoryMakeAdmin/CategoryMakeAdmin";
-import Income from "../Component/Income/Income";
+import Income from "../Component/IncomeExpense/Income";
+import TransactionPage from "../Pages/Transaction/TransactionPage";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: "income",
             element: <Income />,
+          },
+          {
+            path: "transaction",
+            element: <TransactionPage />,
           },
         ],
       },

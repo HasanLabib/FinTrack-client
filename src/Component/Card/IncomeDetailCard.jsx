@@ -10,6 +10,7 @@ const IncomeDetailCard = ({
   handleDelete,
   handleEdit,
   setmoneyModified,
+  onIncomeUpdated,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonText, setButtonText] = useState("Submit");
@@ -20,21 +21,44 @@ const IncomeDetailCard = ({
     e.preventDefault();
     setButtonText("Submitting....!");
     setIsDisabled(true);
-    let amount = e.target.amount.value;
-    let newBalance = parseInt(incomeItem.amount) + parseInt(amount);
+    let amountAdd = parseFloat(e.target.amount.value);
+    let newBalance = parseFloat(incomeItem.amount) + amountAdd;
+    if (onIncomeUpdated) {
+      onIncomeUpdated({ _id: incomeItem._id, amount: newBalance });
+    }
     const data = {
       id: incomeItem._id,
       amount: newBalance,
-      createdByEmail: user.email,
       updatedAt: new Date(),
     };
 
-    const res = await axios.patch("/patch-amount", data);
-    if (res?.data?.modifiedCount > 0) {
+    try {
+      const res = await axios.patch("/patch-amount", data);
+      if (res?.data?.modifiedCount > 0) {
+        await axios.post("/transaction", {
+          source: incomeItem.source,
+          amount: amountAdd,
+          type: "Income",
+          category: incomeItem.category,
+          date: new Date().toISOString().split("T")[0],
+          note: "Added money",
+        });
+
+        setmoneyModified(true);
+        setModalOpen(false);
+      } else {
+        if (onIncomeUpdated) {
+          onIncomeUpdated({ _id: incomeItem._id, amount: incomeItem.amount });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      if (onIncomeUpdated) {
+        onIncomeUpdated({ _id: incomeItem._id, amount: incomeItem.amount });
+      }
+    } finally {
       setButtonText("Submit");
       setIsDisabled(false);
-      setmoneyModified(true);
-      setModalOpen(false);
     }
   };
   if (!incomeItem) return null;
@@ -68,7 +92,7 @@ const IncomeDetailCard = ({
       <div className="mb-5">
         <p className="text-sm text-gray-500">Amount</p>
         <p className="text-3xl font-bold text-gray-900 dark:text-white">
-          ${incomeItem.amount.toFixed(2)}
+          ${parseFloat(incomeItem.amount || 0).toFixed(2)}
         </p>
       </div>
 
@@ -80,7 +104,7 @@ const IncomeDetailCard = ({
 
         <div className="text-right">
           <p className="text-xs uppercase text-gray-400">Note</p>
-          <p className="truncate max-w-[120px]">{incomeItem.note || "N/A"}</p>
+          <p className="truncate max-w-30">{incomeItem.note || "N/A"}</p>
         </div>
       </div>
 

@@ -61,46 +61,59 @@ const Income = () => {
     };
 
     if (editingIncome) {
-      const resEdit = await axios.put(
-        `/update-income/${editingIncome._id}`,
-        incomeData,
-      );
-
-      if (resEdit.data?.modifiedCount > 0) {
-        setAllIncome((prev) =>
-          prev.map((item) =>
-            item._id === editingIncome._id ? { ...item, ...incomeData } : item,
-          ),
+      try {
+        const resEdit = await axios.put(
+          `/update-income/${editingIncome._id}`,
+          incomeData,
         );
+
+        if (resEdit.data?.modifiedCount > 0) {
+          setAllIncome((prev) =>
+            prev.map((item) =>
+              item._id === editingIncome._id
+                ? { ...item, ...incomeData }
+                : item,
+            ),
+          );
+          setModalOpen(false);
+        }
+        setEditingIncome(null);
+      } catch (err) {
+        console.error("Edit error:", err.response?.data || err.message);
+      } finally {
         setButtonText("Submit");
         setIsDisabled(false);
-        setModalOpen(false);
       }
-      setEditingIncome(null);
     } else {
-      const res = await axios.post("/income", incomeData);
-      if (res.data?.insertedId) {
-        setAllIncome((prev) => [
-          ...prev,
-          { _id: res.data.insertedId, ...incomeData },
-        ]);
+      try {
+        const res = await axios.post("/income", incomeData);
+        if (res.data?.insertedId) {
+          setAllIncome((prev) => [
+            ...prev,
+            { _id: res.data.insertedId, ...incomeData },
+          ]);
+          setModalOpen(false);
+
+          await axios.post("/transaction", incomeData);
+        }
+      } catch (err) {
+        console.error("Add income error:", err.response?.data || err.message);
+      } finally {
         setButtonText("Submit");
         setIsDisabled(false);
-        setModalOpen(false);
       }
     }
-    await axios.post("/transaction", incomeData);
 
     form.reset();
   };
 
   useEffect(() => {
     const fetchIncome = async () => {
-      const res = await axios.get(`/income`);
+      const res = await axios.get(`/income?page=${page}`);
       setAllIncome(res.data.income);
     };
     fetchIncome();
-  }, [axios, moneyModified, allIncome, setAllIncome]);
+  }, [axios, moneyModified, page]);
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-3rem)] w-full mt-12 px-4">
@@ -129,6 +142,15 @@ const Income = () => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               setmoneyModified={setmoneyModified}
+              onIncomeUpdated={(updatedItem) => {
+                setAllIncome((prev) =>
+                  prev.map((item) =>
+                    item._id === updatedItem._id
+                      ? { ...item, ...updatedItem }
+                      : item,
+                  ),
+                );
+              }}
             />
           ))}
         </div>
