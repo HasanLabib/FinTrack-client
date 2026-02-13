@@ -1,16 +1,25 @@
 import axios from "axios";
-import React from "react";
-import useAuth from "./useAuth";
+import React, { useEffect } from "react";
+import { auth } from "../Firebase/firebase.config";
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5001",
+  //baseURL: "http://localhost:5001",
+  baseURL: "https://fintrack-server-production-1f62.up.railway.app/",
   withCredentials: true,
 });
 const useAxiosSecure = () => {
-  const { user } = useAuth();
-  axiosSecure.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${user.accessToken}`;
-    return config;
-  });
+  useEffect(() => {
+    const interceptor = axiosSecure.interceptors.request.use(async (config) => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const idToken = await currentUser.getIdToken();
+        config.headers.Authorization = `Bearer ${idToken}`;
+      }
+      return config;
+    });
+    return () => {
+      axiosSecure.interceptors.request.eject(interceptor);
+    };
+  }, []);
   return axiosSecure;
 };
 
