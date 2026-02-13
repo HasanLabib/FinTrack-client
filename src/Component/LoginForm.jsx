@@ -76,6 +76,7 @@ const LoginForm = () => {
         <div className="mt-4">
           <button
             type="submit"
+            disabled={isDisable}
             className="w-full bg-[#FF7E6D] text-white py-3 rounded-md hover:bg-[#fb604b] transition"
           >
             {buttonText}

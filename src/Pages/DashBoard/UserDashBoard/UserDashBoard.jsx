@@ -3,7 +3,7 @@ import SideBar from "../../../Component/SideBar";
 import { Outlet } from "react-router";
 
 const UserDashBoard = () => {
-  return <div className="flex">UserDashBoard</div>;
+  return <Outlet />;
 };
 
 export default UserDashBoard;

@@ -8,10 +8,9 @@ const DashBoardLayout = () => {
     <div className="flex">
       <SideBar />
       <main className="flex-1 p-5 bg-gray-100 min-h-screen">
-        <div className="flex  justify-between items-start">
-          
+        <div className="flex  justify-between items-start">    
           <Outlet />
-          <Navbar />
+          <Navbar className="mb-5"/>
         </div>
       </main>
     </div>

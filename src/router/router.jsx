@@ -9,6 +9,8 @@ import DashBoardLayout from "../Pages/DashBoard/DashBoardLayout";
 import UserDashBoard from "../Pages/DashBoard/UserDashBoard/UserDashBoard";
 import AdminDashBoard from "../Pages/DashBoard/AdminDashboard/AdminDashBoard";
 import RoleBasedRedirect from "../Pages/DashBoard/RoleBasedRedirect";
+import CategoryMakeAdmin from "../Component/CategoryMakeAdmin/CategoryMakeAdmin";
+import Income from "../Component/Income/Income";
 
 const router = createBrowserRouter([
   {
@@ -34,16 +36,28 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        index:true,
-        element: <RoleBasedRedirect /> ,
+        index: true,
+        element: <RoleBasedRedirect />,
       },
       {
         path: "userDashboard",
         element: <UserDashBoard />,
+        children: [
+          {
+            path: "income",
+            element: <Income />,
+          },
+        ],
       },
       {
         path: "adminDashboard",
         element: <AdminDashBoard />,
+        children: [
+          {
+            path: "category",
+            element: <CategoryMakeAdmin />,
+          },
+        ],
       },
     ],
   },

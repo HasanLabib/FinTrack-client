@@ -13,8 +13,8 @@ const RegisterForm = () => {
   const { creatUser, user } = useAuth();
   const navigate = useNavigate();
 
-  //   console.log(user);
-  //   if (user) navigate("/dashboard");
+    console.log(user);
+    if (user) navigate("/dashboard");
 
   const handlePhotoChange = (e) => {
     const { name, files } = e.target;

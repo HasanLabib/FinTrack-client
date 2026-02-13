@@ -7,6 +7,8 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import PaginationComp from "../PaginationComp";
 const CategoryMakeAdmin = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [buttonText, setButtonText] = useState("Submit");
+  const [isDisable, setIsDisabled] = useState(false);
   const [editingCatgory, setEditingCatgory] = useState(null);
   const {
     allCategory,
@@ -42,6 +44,8 @@ const CategoryMakeAdmin = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setButtonText("Submitting...!");
+    setIsDisabled(true);
     const category = e.target.category.value;
     if (editingCatgory) {
       console.log(editingCatgory);
@@ -55,6 +59,8 @@ const CategoryMakeAdmin = () => {
             item._id === editingCatgory._id ? { ...item, category } : item,
           ),
         );
+        setButtonText("Submit");
+        setIsDisabled(false);
       }
       setEditingCatgory(null);
       e.target.reset();
@@ -67,6 +73,8 @@ const CategoryMakeAdmin = () => {
           ...prev,
           { _id: res.data.insertedId, category },
         ]);
+        setButtonText("Submit");
+        setIsDisabled(false);
       }
       e.target.reset();
       setModalOpen(false);
@@ -74,45 +82,56 @@ const CategoryMakeAdmin = () => {
   };
 
   return (
-    <>
-      <div>
+    <div className="flex flex-col min-h-[calc(100vh-3rem)] w-full mt-12 px-4">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-[#201F24] font-bold text-3xl">Category</h1>
         <button
-          className="btn"
+          className="btn bg-[#201F24] max-w-32 min-h-13.25 w-full p-4 rounded-xl text-white"
           onClick={() => {
             setEditingCatgory(null);
             setModalOpen(true);
           }}
         >
-          Create Category
+          +Create Category
         </button>
       </div>
-      <div>
+
+      <div className="grow">
         {categoryLoading && <p>Loading...</p>}
         {categoryError && <p className="text-red-500">Something went wrong</p>}
-        {allCategory.map((categoryItem) => {
-          return (
-            <div key={categoryItem._id} className="card bg-base-100 w-fit">
-              <p>{categoryItem.category}</p>
+
+        <div className="flex flex-wrap gap-4">
+          {allCategory.map((categoryItem) => (
+            <div
+              key={categoryItem._id}
+              className="card hover:bg-slate-100 flex-row justify-center items-center bg-base-100 shadow-sm p-4 border w-fit"
+            >
+              <p className="font-medium p-5 select-none">
+                {categoryItem.category}
+              </p>
               <div className="flex gap-2">
                 <button
-                  className="btn btn-md rounded-full w-12 h-12 btn-outline btn-info"
+                  className="btn btn-sm btn-circle btn-outline btn-info"
                   onClick={() => handleEdit(categoryItem)}
                 >
-                  <CiEdit className="text-2xl" />
+                  <CiEdit className="text-xl" />
                 </button>
                 <button
-                  className="btn btn-md rounded-full w-12 h-12 btn-outline btn-error"
+                  className="btn btn-sm btn-circle btn-outline btn-error"
                   onClick={() => handleDelete(categoryItem)}
                 >
-                  <MdDelete className="text-2xl" />
+                  <MdDelete className="text-xl" />
                 </button>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-      <PaginationComp countPage={totalPage} page={page} setPage={setPage} />
+
+      <div className="py-6 mt-auto">
+        <PaginationComp countPage={totalPage} page={page} setPage={setPage} />
+      </div>
+
       {modalOpen && (
         <dialog id="my_modal_3" className="modal modal-open">
           <div className="modal-box">
@@ -120,11 +139,13 @@ const CategoryMakeAdmin = () => {
               handleSubmit={handleSubmit}
               setModalOpen={setModalOpen}
               editingCategory={editingCatgory}
+              isDisable={isDisable}
+              buttonText={buttonText}
             />
           </div>
         </dialog>
       )}
-    </>
+    </div>
   );
 };
 
