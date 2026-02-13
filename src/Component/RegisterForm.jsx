@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
-import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 import Register from "../Pages/Authentication/Register/Register";
+import { Link, useNavigate } from "react-router";
 const RegisterForm = () => {
-  const axios = useAxios();
   const [photoValueState, setPhotoValueState] = useState({
     profile_photo: null,
   });
   const [passwordError, setPasswordError] = useState("");
   const [buttonText, setButtonText] = useState("Register");
   const [isDisable, setIsDisabled] = useState(false);
-  const { creatUser } = useAuth();
+  const { creatUser, user } = useAuth();
+  const navigate = useNavigate();
+
+  //   console.log(user);
+  //   if (user) navigate("/dashboard");
+
   const handlePhotoChange = (e) => {
     const { name, files } = e.target;
 
@@ -22,6 +26,8 @@ const RegisterForm = () => {
   };
   const handleRegister = async (e) => {
     e.preventDefault();
+    setButtonText("Registering...!");
+    setIsDisabled(true);
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
@@ -33,6 +39,8 @@ const RegisterForm = () => {
       setPasswordError(
         "Password must be 6+ chars with uppercase & lowercase letters",
       );
+      setButtonText("Register");
+      setIsDisabled(false);
       return;
     }
 
@@ -42,14 +50,20 @@ const RegisterForm = () => {
     userData.append("password", password);
     userData.append("profile_photo", photo);
 
-    const response = await creatUser(userData);
+    try {
+      const response = await creatUser(userData);
+      console.log("Register success:", response);
+      if (response) {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Register failed:", error);
+      setPasswordError(error.response?.data?.message || "Login failed");
+      setButtonText("Register");
+      setIsDisabled(false);
+    }
+  };
 
-    console.log(response);
-  };
-  const handleClick = () => {
-    setButtonText("Registering...!");
-    setIsDisabled(true);
-  };
   return (
     <div className="w-full max-w-md p-6 bg-[#f1efef] rounded-2xl border">
       {" "}
@@ -117,11 +131,20 @@ const RegisterForm = () => {
         <div className="mt-4">
           <button
             type="submit"
-            onClick={handleClick}
             className="w-full bg-[#FF7E6D] text-white py-3 rounded-md hover:bg-[#fb604b] transition"
           >
             {buttonText}
           </button>
+        </div>
+        <div className="text-center mt-2">
+          Already have an account?
+          <Link
+            to="/login"
+            className="link link-hover text-blue-400 hover:text-blue-600"
+          >
+            {" "}
+            Login
+          </Link>
         </div>
       </form>
     </div>

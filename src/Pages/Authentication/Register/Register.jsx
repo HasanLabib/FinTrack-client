@@ -14,9 +14,14 @@ const Register = () => {
             <AuthBanner />
           </section>
         )}
+        <h1
+          className={`text-center  text-5xl font-bold text-white ${width === "lg" ? "hidden" : " "}`}
+        >
+          fintrack
+        </h1>
 
         <section
-          className={`${width === "lg" ? "col-span-2" : ''} min-h-screen flex justify-center items-center`}
+          className={`${width === "lg" ? "col-span-2" : ""} min-h-screen flex justify-center items-center`}
         >
           <RegisterForm />
         </section>

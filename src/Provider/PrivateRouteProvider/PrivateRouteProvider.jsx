@@ -1,7 +1,20 @@
 import React from "react";
 
-const PrivateRouteProvider = () => {
-  return <div></div>;
+import { Navigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
+
+const ProtectedRoute = ({ children }) => {
+  const { user, userLoading } = useAuth();
+
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user && !userLoading) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
-export default PrivateRouteProvider;
+export default ProtectedRoute;

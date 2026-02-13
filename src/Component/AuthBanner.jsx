@@ -3,7 +3,7 @@ import bannerImg from "../assets/images/illustration-authentication.svg";
 const AuthBanner = () => {
   return (
     <section className="relative z-0 min-h-screen h-full border border-none rounded-2xl p-5  ">
-      <h1 className="absolute z-10 text-5xl text-white p-10">fintrack</h1>
+      <h1 className="absolute z-10 text-5xl font-bold text-white p-10">fintrack</h1>
       <img
         src={bannerImg}
         loading="lazy"

@@ -1,7 +1,7 @@
 import React from "react";
 import AuthBanner from "../../../Component/AuthBanner";
 import useWindowSIze from "../../../hooks/useWindowSIze";
-import LoginForm from '../../../Component/LoginForm';
+import LoginForm from "../../../Component/LoginForm";
 
 const Login = () => {
   const width = useWindowSIze();
@@ -14,9 +14,14 @@ const Login = () => {
             <AuthBanner />
           </section>
         )}
+        <h1
+          className={`text-center  text-5xl font-bold text-white ${width === "lg" ? "hidden" : " "}`}
+        >
+          fintrack
+        </h1>
 
         <section
-          className={`${width === "lg" ? "col-span-2" : ''} min-h-screen flex justify-center items-center`}
+          className={`${width === "lg" ? "col-span-2" : ""} min-h-screen flex justify-center items-center p-4`}
         >
           <LoginForm />
         </section>
