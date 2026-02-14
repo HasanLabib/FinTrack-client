@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { axios } from "../../../../node_modules/axios/dist/esm/axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import Loading from "../../../utils/Loading";
