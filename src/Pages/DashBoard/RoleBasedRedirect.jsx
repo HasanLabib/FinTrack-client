@@ -12,7 +12,7 @@ const RoleBasedRedirect = () => {
   if (!user && !userLoading) {
     return <Navigate to="/login" replace />;
   }
-  console.log("User : ", user);
+  //console.log("User : ", user);
 
   const dashBoardPath =
     user.role === "admin" ? "adminDashboard" : "userDashboard";

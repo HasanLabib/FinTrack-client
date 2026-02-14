@@ -15,7 +15,7 @@ const useCategoryHook = () => {
         const result = await axios.get(`/category?page=${page}`);
         setAllCategory(result.data.category);
         setTotalPage(result.data.totalPages);
-        console.log(result.data.category);
+        //console.log(result.data.category);
       } catch (err) {
         setCategoryError(err);
       } finally {

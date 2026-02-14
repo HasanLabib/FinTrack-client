@@ -48,7 +48,7 @@ const CategoryMakeAdmin = () => {
     setIsDisabled(true);
     const category = e.target.category.value;
     if (editingCatgory) {
-      console.log(editingCatgory);
+      //console.log(editingCatgory);
       const resEdit = await axios.put(
         `/update-category/${editingCatgory._id}`,
         { category },

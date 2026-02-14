@@ -5,7 +5,7 @@ import RegisterForm from "../../../Component/RegisterForm";
 
 const Register = () => {
   const width = useWindowSIze();
-  console.log(width);
+  //console.log(width);
   return (
     <>
       <section className="grid grid-cols-3  max-md:flex max-md:flex-col bg-[#201F24]">

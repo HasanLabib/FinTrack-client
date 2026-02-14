@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
 
     const res = await axios.post("/login", { email, password });
     const { firebaseToken, user: backendUser } = res.data;
-    console.log(backendUser);
+   // console.log(backendUser);
     const userCredential = await signInWithCustomToken(auth, firebaseToken);
     const firebaseUser = auth.currentUser;
 

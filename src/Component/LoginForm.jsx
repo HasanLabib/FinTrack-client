@@ -28,7 +28,7 @@ const LoginForm = () => {
 
     try {
       const response = await signInUser({ email, password });
-      console.log("Login success:", response);
+     // console.log("Login success:", response);
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);

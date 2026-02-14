@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const EditTransactionForm = ({
+const EditTransactionFormAdmin = ({
   transaction,
   setModalOpen,
   updateTransaction,
@@ -21,7 +21,7 @@ const EditTransactionForm = ({
 
     const updatedData = {
       source,
-      amount, 
+      amount,
       category,
       type,
       date,
@@ -29,7 +29,7 @@ const EditTransactionForm = ({
     };
 
     const result = await updateTransaction(transaction._id, updatedData);
-    //console.log(result);
+   // console.log(result);
     setIsDisable(false);
     setModalOpen(false);
   };
@@ -60,6 +60,8 @@ const EditTransactionForm = ({
             name="source"
             defaultValue={transaction?.source}
             className="input input-bordered w-full"
+            disabled={true}
+            readOnly
             required
           />
         </div>
@@ -72,6 +74,8 @@ const EditTransactionForm = ({
             name="amount"
             defaultValue={transaction?.amount}
             className="input input-bordered w-full"
+            disabled={true}
+            readOnly
             required
           />
         </div>
@@ -112,7 +116,9 @@ const EditTransactionForm = ({
                 : ""
             }
             className="input input-bordered w-full"
+            disabled={true}
             required
+            readOnly
           />
         </div>
 
@@ -123,6 +129,8 @@ const EditTransactionForm = ({
             defaultValue={transaction?.note}
             className="textarea textarea-bordered w-full"
             rows="3"
+            disabled={true}
+            readOnly={true}
           ></textarea>
         </div>
         <button
@@ -137,4 +145,4 @@ const EditTransactionForm = ({
   );
 };
 
-export default EditTransactionForm;
+export default EditTransactionFormAdmin;

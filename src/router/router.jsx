@@ -14,6 +14,8 @@ import Income from "../Component/IncomeExpense/Income";
 import TransactionPage from "../Pages/Transaction/TransactionPage";
 import Expense from "../Component/IncomeExpense/Expense";
 import Savings from "../Component/IncomeExpense/Savings";
+import TransactionPageAdmin from "../Pages/Transaction/TransactionPageAdmin";
+import AnalyticsDashboard from "../Pages/DashBoard/AnalyticsDashboard";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,10 @@ const router = createBrowserRouter([
         element: <UserDashBoard />,
         children: [
           {
+            path: "overview",
+            element: <AnalyticsDashboard />,
+          },
+          {
             path: "income",
             element: <Income />,
           },
@@ -69,8 +75,16 @@ const router = createBrowserRouter([
         element: <AdminDashBoard />,
         children: [
           {
+            path: "overview",
+            element: <AnalyticsDashboard />,
+          },
+          {
             path: "category",
             element: <CategoryMakeAdmin />,
+          },
+          {
+            path: "transaction",
+            element: <TransactionPageAdmin />,
           },
         ],
       },

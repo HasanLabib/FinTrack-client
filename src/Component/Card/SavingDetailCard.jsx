@@ -36,6 +36,8 @@ const SavingDetailCard = ({
     fetchProgress();
   }, [savingItem._id, moneyModified]);
 
+  
+
   const currentAmount = parseFloat(savingItem.amount || 0);
   const targetAmount = parseFloat(savingItem.target || 0);
   const progressPercent =

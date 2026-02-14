@@ -167,7 +167,7 @@ const Savings = () => {
             <SavingMoneyForm
               handleSubmit={handleSubmit}
               setModalOpen={setModalOpen}
-              editingSaving={editingSaving}
+              editingSavings={editingSaving}
               allCategory={allCategory}
               isDisable={isDisable}
               buttonText={buttonText}

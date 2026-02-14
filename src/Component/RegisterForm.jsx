@@ -13,7 +13,7 @@ const RegisterForm = () => {
   const { creatUser, user } = useAuth();
   const navigate = useNavigate();
 
-    console.log(user);
+   // console.log(user);
     if (user) navigate("/dashboard");
 
   const handlePhotoChange = (e) => {
@@ -52,7 +52,7 @@ const RegisterForm = () => {
 
     try {
       const response = await creatUser(userData);
-      console.log("Register success:", response);
+     // console.log("Register success:", response);
       if (response) {
         navigate("/dashboard");
       }

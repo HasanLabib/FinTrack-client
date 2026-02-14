@@ -8,7 +8,7 @@ const IncomeExpenseForm = ({
   buttonText,
   isDisable,
 }) => {
-  console.log(allCategory);
+  //console.log(allCategory);
   return (
     <div className="max-w-md w-full  flex flex-col gap-5">
       <div className="flex justify-between items-center">

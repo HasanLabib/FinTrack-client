@@ -3,7 +3,7 @@ import useAuth from "./hooks/useAuth";
 
 function App() {
   const { user } = useAuth();
-  console.log(user);
+ // console.log(user);
   if (user) {
     return (
       <>
