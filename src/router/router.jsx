@@ -18,6 +18,7 @@ import TransactionPageAdmin from "../Pages/Transaction/TransactionPageAdmin";
 import AnalyticsDashboard from "../Pages/DashBoard/AnalyticsDashboard";
 import AdminAnalytics from "../Pages/DashBoard/AdminAnalytics";
 import ManageUsers from "../Pages/DashBoard/AdminDashboard/ManageUsers";
+import AdminTipsManagement from "../Component/FormComponent/AdminTipsManagement";
 
 const router = createBrowserRouter([
   {
