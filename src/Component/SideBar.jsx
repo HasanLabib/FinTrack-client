@@ -6,6 +6,7 @@ import iconExpense from "../assets/images/icon-nav-recurring-bills.svg";
 import iconSaving from "../assets/images/icon-nav-pots.svg";
 import iconTransac from "../assets/images/icon-nav-transactions.svg";
 import { CiLogin } from "react-icons/ci";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
 const SideBar = () => {
   const { user, userLoading, logOut } = useAuth();
 
@@ -17,11 +18,11 @@ const SideBar = () => {
   //console.log(user);
   const menuItems =
     user?.role === "admin"
-      ? ["Overview", "Category", "Transaction"]
+      ? ["Overview", "Tips", "Category", "Manage User", "Transaction"]
       : ["Overview", "Income", "Expense", "Savings", "Transaction"];
   const iconItems =
     user?.role === "admin"
-      ? ["C", "T"]
+      ? [iconOverView, "", "", "", iconTransac]
       : [iconOverView, iconIncome, iconExpense, iconSaving, iconTransac];
   const dashBoard = user?.role === "admin" ? "adminDashboard" : "userDashboard";
   const handleLogout = () => {

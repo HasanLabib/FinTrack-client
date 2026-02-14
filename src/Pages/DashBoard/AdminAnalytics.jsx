@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Bar, Pie } from "react-chartjs-2";
 import {
   LineChart,
   Line,
@@ -10,43 +10,18 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-import { Bar, Pie } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip as ChartTooltip,
-  Legend as ChartLegend,
-} from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import useAnalytics from "../../hooks/useAnalytics";
-import useRecentTransactions from "../../hooks/useRecentTransactions";
-import { Link } from "react-router";
+import useAdminAnalytics from "../../hooks/useAdminAnalytics";
+import useTips from "../../hooks/useTips"; // you'll create this
 import Loading from "../../utils/Loading";
-import useTips from "../../hooks/useTips";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  ChartTooltip,
-  ChartLegend,
-  ChartDataLabels,
-);
-
-const AnalyticsDashboard = ({ year = new Date().getFullYear() }) => {
-  const {
-    recentTransactions,
-    recentTransactionsLoading,
-    recentTransactionserror,
-  } = useRecentTransactions();
-  const { tips } = useTips();
+const colorPalette = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#8BC34A",
+  "#FF9800",
+  "#9C27B0",
+];
+const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
   const {
     incomeVsExpenseBarData,
     monthlyExpenseTrendLineData,
@@ -58,29 +33,21 @@ const AnalyticsDashboard = ({ year = new Date().getFullYear() }) => {
     savingsBySourceBarData,
     monthlyIncomeExpenseRatioLineData,
     financialSummaryData,
-    isLoading,
     insights,
-  } = useAnalytics(year);
+    totalUsers,
+    totalTransactions,
+    isLoading,
+  } = useAdminAnalytics(year);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { tips } = useTips();
 
-  const colorPalette = [
-    "#FF6384",
-    "#36A2EB",
-    "#FFCE56",
-    "#8BC34A",
-    "#FF9800",
-    "#9C27B0",
-  ];
+  if (isLoading) return <Loading />;
 
   const chartContainerStyles = {
     position: "relative",
     height: "320px",
     width: "100%",
   };
-
   const convertToRechartsFormat = (chartDataObject) => {
     const { labels, datasets } = chartDataObject;
     if (!labels || !datasets || !datasets.length) return [];
@@ -92,160 +59,50 @@ const AnalyticsDashboard = ({ year = new Date().getFullYear() }) => {
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-10">
-      <h1 className="text-3xl font-bold text-center mb-8">
-        Financial Analytics Dashboard — {year}
+    <div className="container mx-auto p-6 space-y-10">
+      <h1 className="text-4xl font-bold text-center">
+        Platform Financial Overview — {year}
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="w-full bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Yearly Income
-              </h2>
-            </div>
-          </div>
-          <div className="mb-5 text-center">
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              ${financialSummaryData.yearlyIncome.toFixed(2)}
-            </p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg">Total Users</h3>
+          <p className="text-4xl font-bold">{totalUsers}</p>
         </div>
-        <div className="w-full bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Yearly Expenses
-              </h2>
-            </div>
-          </div>
-          <div className="mb-5 text-center">
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              ${financialSummaryData.yearlyExpense.toFixed(2)}
-            </p>
-          </div>
+        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg">Total Transactions</h3>
+          <p className="text-4xl font-bold">{totalTransactions}</p>
         </div>
-        <div className="w-full bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Yearly Savings
-              </h2>
-            </div>
-          </div>
-          <div className="mb-5 text-center">
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              ${financialSummaryData.yearlySavings.toFixed(2)}
-            </p>
-          </div>
+        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg">Yearly Income</h3>
+          <p className="text-4xl font-bold text-green-600">
+            ${financialSummaryData.yearlyIncome.toFixed(2)}
+          </p>
         </div>
-        <div className="w-full bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Net Balance
-              </h2>
-            </div>
-          </div>
-          <div className="mb-5 text-center">
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">
-              $
-              {(
-                financialSummaryData.yearlyIncome -
-                financialSummaryData.yearlyExpense +
-                financialSummaryData.yearlySavings
-              ).toFixed(2)}
-            </p>
-          </div>
+        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg">Yearly Expenses</h3>
+          <p className="text-4xl font-bold text-red-600">
+            ${financialSummaryData.yearlyExpense.toFixed(2)}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg">Yearly Savings</h3>
+          <p className="text-4xl font-bold text-emerald-600">
+            ${financialSummaryData.yearlySavings.toFixed(2)}
+          </p>
         </div>
       </div>
 
-      <div className="mt-8">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-900  mb-4">
-            Recent Transactions
-          </h2>
-          <Link to={"/dashboard/userDashboard/transaction"}>View More</Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recentTransactions.map((transaction, index) => (
-            <div
-              key={index}
-              className="w-full bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
-                    {transaction.type || "Transaction"}
-                  </h2>
-                  <p className="text-xs text-gray-500">
-                    {transaction.category || "N/A"}
-                  </p>
-                </div>
-              </div>
-              <div className="mb-5">
-                <p className="text-sm text-gray-500">Amount</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  ${parseFloat(transaction.amount || 0).toFixed(2)}
-                </p>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <div>
-                  <p className="text-xs uppercase text-gray-400">Date</p>
-                  <p>{new Date(transaction.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs uppercase text-gray-400">Note</p>
-                  <p className="truncate max-w-37.5">
-                    {transaction.note || "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-8 rounded-3xl">
+        <h2 className="text-2xl font-bold mb-4">Smart Financial Insights</h2>
+        <ul className="space-y-3 text-lg">
+          {insights.map((insight, i) => (
+            <li key={i} className="flex items-start gap-3">
+              <span className="text-2xl">💡</span>
+              <span>{insight}</span>
+            </li>
           ))}
-        </div>
-      </div>
-
-      <div className="bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 text-white rounded-3xl p-8 shadow-xl">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="text-5xl">🧠</div>
-          <div>
-            <h2 className="text-3xl font-bold">Smart Financial Insights</h2>
-            <p className="text-emerald-100">
-              Personalized based on your spending, savings & patterns
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {insights.map((insight, index) => (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20"
-            >
-              <p className="text-lg leading-relaxed">{insight}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-10">
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <span>⭐</span> Featured Tips from FinTrack Experts
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {tips.map((tip) => (
-              <div
-                key={tip._id}
-                className="bg-white/10 backdrop-blur rounded-xl p-4 hover:bg-white/20 transition-all"
-              >
-                <p className="font-medium text-sm leading-tight">
-                  {tip.title || tip.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        </ul>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -507,8 +364,25 @@ const AnalyticsDashboard = ({ year = new Date().getFullYear() }) => {
           </div>
         </div>
       </div>
+
+      <div>
+        <h2 className="text-2xl font-bold mb-6">Featured Financial Tips</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {tips.map((tip) => (
+            <div
+              key={tip._id}
+              className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow"
+            >
+              <h3 className="font-semibold text-lg">{tip.title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                {tip.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default AnalyticsDashboard;
+export default AdminAnalytics;

@@ -19,6 +19,8 @@ const monthNames = [
 const useAnalytics = (year = new Date().getFullYear()) => {
   const axiosSecure = useAxiosSecure();
   const [isLoading, setIsLoading] = useState(true);
+  const [insights, setInsights] = useState([]);
+  const [featuredTips, setFeaturedTips] = useState([]);
   const [incomeVsExpenseBarData, setIncomeVsExpenseBarData] = useState({
     labels: monthNames,
     datasets: [
@@ -306,6 +308,70 @@ const useAnalytics = (year = new Date().getFullYear()) => {
       });
 
       setIsLoading(false);
+
+      const totalIncome = monthlyIncomeTotalsArray.reduce((a, b) => a + b, 0);
+      const totalExpense = monthlyExpenseTotalsArray.reduce((a, b) => a + b, 0);
+      const totalSavings = monthlySavingsGrowthArray.reduce((a, b) => a + b, 0);
+      const totalTransactionsThisYear = yearlyTransactionsList.length;
+
+      const savingsRate =
+        totalIncome > 0 ? ((totalSavings / totalIncome) * 100).toFixed(1) : 0;
+      const expenseRatio =
+        totalIncome > 0 ? ((totalExpense / totalIncome) * 100).toFixed(1) : 0;
+
+      const topCategoryEntry = Object.entries(
+        yearlyCategoryTotalsObject,
+      ).reduce((max, entry) => (entry[1] > max[1] ? entry : max), ["", 0]);
+      const topCategory = topCategoryEntry[0];
+
+      let newInsights = [];
+
+      if (totalTransactionsThisYear < 15) {
+        newInsights = [
+          "You have limited transaction data this year. The more you track, the smarter your insights become! 📈",
+          "General Tip: Follow the 50/30/20 rule — 50% needs, 30% wants, 20% savings.",
+          "Sample Insight: Most users who save consistently reach their goals 3× faster.",
+          `Common expense trap: ${topCategory || "Dining Out"} is a frequent culprit for many users.`,
+        ];
+      } else {
+        newInsights.push(
+          `Your savings rate is ${savingsRate}%. ${savingsRate >= 20 ? "Excellent work! You're building real wealth." : "Try to push it toward 20% for better financial security."}`,
+        );
+
+        if (expenseRatio > 75) {
+          newInsights.push(
+            "You're spending over 75% of income. Consider reviewing subscriptions and non-essential spending.",
+          );
+        } else if (expenseRatio < 50) {
+          newInsights.push(
+            "Strong control over expenses! You're in a great position to accelerate savings.",
+          );
+        }
+
+        if (topCategory) {
+          newInsights.push(
+            `Your biggest spending category is "${topCategory}". Setting a monthly budget here could save you hundreds.`,
+          );
+        }
+        const recentExpenseAvg =
+          monthlyExpenseTotalsArray.slice(-3).reduce((a, b) => a + b, 0) / 3;
+        const overallExpenseAvg = totalExpense / 12;
+        if (recentExpenseAvg > overallExpenseAvg * 1.25) {
+          newInsights.push(
+            "Expenses have spiked in the last 3 months. Time to investigate!",
+          );
+        }
+        if (totalSavings > totalExpense * 0.6) {
+          newInsights.push(
+            "Outstanding savings behavior! You're well on your way to financial freedom.",
+          );
+        }
+      }
+      newInsights.push(
+        "Pro tip: Automate your savings transfer right after payday — out of sight, out of mind! 💰",
+      );
+
+      setInsights(newInsights);
     };
 
     fetchAnalyticsData();
