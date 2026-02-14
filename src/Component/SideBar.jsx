@@ -18,7 +18,7 @@ const SideBar = () => {
   //console.log(user);
   const menuItems =
     user?.role === "admin"
-      ? ["Overview", "Tips", "Category", "Manage User", "Transaction"]
+      ? ["Overview", "Tips", "Category", "Manage-User", "Transaction"]
       : ["Overview", "Income", "Expense", "Savings", "Transaction"];
   const iconItems =
     user?.role === "admin"

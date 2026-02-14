@@ -39,8 +39,8 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
     isLoading,
   } = useAdminAnalytics(year);
 
-  const { tips } = useTips();
-  console.log("h")
+  const { tips, loading: tipsLoading, error: tipsError } = useTips();
+  console.log("h");
 
   if (isLoading) return <Loading />;
 
@@ -110,7 +110,6 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-semibold mb-5">
             Income vs Expense Comparison
-
           </h2>
           <div style={chartContainerStyles}>
             <Bar
@@ -370,17 +369,26 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
       <div>
         <h2 className="text-2xl font-bold mb-6">Featured Financial Tips</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {tips.map((tip) => (
-            <div
-              key={tip._id}
-              className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow"
-            >
-              <h3 className="font-semibold text-lg">{tip.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                {tip.description}
-              </p>
+          {!tipsLoading && !tipsError && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">
+                Featured Financial Tips
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {tips.map((tip) => (
+                  <div
+                    key={tip._id}
+                    className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow"
+                  >
+                    <h3 className="font-semibold text-lg">{tip.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2">
+                      {tip.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
