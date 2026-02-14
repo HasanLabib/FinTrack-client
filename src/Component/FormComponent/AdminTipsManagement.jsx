@@ -6,7 +6,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Loading from "../../utils/Loading";
-import AdminTipForm from "../../components/FormComponent/AdminTipForm";
+import AdminTipForm from "./AdminTipForm";
 
 const AdminTipsManagement = () => {
   const { tips, loading, addTip, updateTip, deleteTip, fetchTips } = useAdminTips();
