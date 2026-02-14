@@ -12,6 +12,7 @@ import RoleBasedRedirect from "../Pages/DashBoard/RoleBasedRedirect";
 import CategoryMakeAdmin from "../Component/CategoryMakeAdmin/CategoryMakeAdmin";
 import Income from "../Component/IncomeExpense/Income";
 import TransactionPage from "../Pages/Transaction/TransactionPage";
+import Expense from "../Component/IncomeExpense/Expense";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
           {
             path: "transaction",
             element: <TransactionPage />,
+          },
+          {
+            path: "expense",
+            element: <Expense />,
           },
         ],
       },

@@ -5,6 +5,7 @@ import iconIncome from "../assets/images/icon-nav-budgets.svg";
 import iconExpense from "../assets/images/icon-nav-recurring-bills.svg";
 import iconSaving from "../assets/images/icon-nav-pots.svg";
 import iconTransac from "../assets/images/icon-nav-transactions.svg";
+import { CiLogin } from "react-icons/ci";
 const SideBar = () => {
   const { user, userLoading, logOut } = useAuth();
 
@@ -16,11 +17,11 @@ const SideBar = () => {
   console.log(user);
   const menuItems =
     user?.role === "admin"
-      ? ["Category","Transaction"]
+      ? ["Category", "Transaction"]
       : ["Overview", "Income", "Expense", "Savings", "Transaction"];
   const iconItems =
     user?.role === "admin"
-      ? ["C","T"]
+      ? ["C", "T"]
       : [iconOverView, iconIncome, iconExpense, iconSaving, iconTransac];
   const dashBoard = user?.role === "admin" ? "adminDashboard" : "userDashboard";
   const handleLogout = () => {
@@ -30,7 +31,7 @@ const SideBar = () => {
   return (
     <>
       {" "}
-      <aside className=" min-h-screen max-w-75 w-full flex flex-col justify-between bg-[#201F24] p-4 text-white">
+      <aside className="hidden lg:flex min-h-screen max-w-75 w-full  flex-col justify-between bg-[#201F24] p-4 text-white">
         <div>
           {" "}
           <h1 className={` text-5xl font-bold text-white mb-5 `}>fintrack</h1>
@@ -59,6 +60,41 @@ const SideBar = () => {
           Logout
         </button>
       </aside>
+      <nav
+        className="
+          fixed bottom-0 left-0 right-0 z-50           
+          lg:hidden                                 
+          bg-[#201F24] border-t border-gray-700
+          flex items-center justify-around py-2 px-4
+          shadow-lg
+        "
+      >
+        {menuItems.map((item, idx) => (
+          <Link
+            key={item}
+            to={`/dashboard/${dashBoard}/${item.toLowerCase()}`}
+            className="
+              flex flex-col items-center gap-1 p-2 
+              text-[#B3B3B3] hover:text-amber-300 
+              transition-colors active:scale-95
+            "
+          >
+            <img
+              src={iconItems[idx]}
+              alt={item}
+              className="w-6 h-6 object-contain"
+            />
+            <span className="text-xs font-medium">{item}</span>
+          </Link>
+        ))}
+        <button
+          className="font-black text-3xl text-[#B3B3B3]  cursor-pointer"
+          onClick={handleLogout}
+        >
+          <CiLogin />
+        </button>
+      </nav>
+      <div className="lg:hidden h-16" />
     </>
   );
 };

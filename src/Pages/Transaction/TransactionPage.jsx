@@ -51,7 +51,7 @@ const TransactionPage = () => {
   if (loading) return <p className="text-center">Loading...</p>;
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-md">
+    <div className="p-6 mt-10 w-full bg-white rounded-xl shadow-md">
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <input
           type="text"
@@ -84,7 +84,6 @@ const TransactionPage = () => {
           <option value="Expense">Expense</option>
         </select>
       </div>
-
       <div className="flex gap-4 mb-6">
         <select
           className="select select-bordered"
@@ -104,8 +103,7 @@ const TransactionPage = () => {
           <option value="asc">Ascending</option>
         </select>
       </div>
-
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto hidden lg:block">
         <table className="table table-sm">
           <thead>
             <tr>
@@ -171,6 +169,37 @@ const TransactionPage = () => {
         </table>
       </div>
 
+      <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        {transactions.map((trans, idx) => (
+          <div className="  w-full max-w-md bg-white dark:bg-[#201F24] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {trans.source}
+                </h2>
+                <p className="text-xs text-gray-500">{trans.category}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase text-gray-400">Date</p>
+                <p className="text-white">{trans.date}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-left">
+                <p className="text-sm text-gray-500">Amount</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  ${parseFloat(trans.amount || 0).toFixed(2)}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs uppercase text-gray-400">Note</p>
+                <p className="truncate max-w-30">{trans.note || "N/A"}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
       <Stack spacing={2} alignItems="center" className="mt-6">
         <Pagination
           count={totalPage}
@@ -180,7 +209,6 @@ const TransactionPage = () => {
           color="primary"
         />
       </Stack>
-
       {modalOpen && (
         <dialog className="modal modal-open">
           <div className="modal-box bg-white">
