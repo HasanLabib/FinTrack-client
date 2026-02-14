@@ -36,6 +36,7 @@ const IncomeDetailCard = ({
       const res = await axios.patch("/patch-amount", data);
       if (res?.data?.modifiedCount > 0) {
         await axios.post("/transaction", {
+          targetID:incomeItem._id,
           source: incomeItem.source,
           amount: amountAdd,
           type: "Income",

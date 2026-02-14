@@ -23,7 +23,7 @@ const ExpenseDetailCard = ({
     setButtonText("Submitting....!");
     setIsDisabled(true);
     let amountDeduct = parseFloat(e.target.amount.value);
-    let newBalance = parseFloat(expenseItem.amount) + amountDeduct; 
+    let newBalance = parseFloat(expenseItem.amount) + amountDeduct;
     if (onExpenseUpdated) {
       onExpenseUpdated({ _id: expenseItem._id, amount: newBalance });
     }
@@ -34,9 +34,10 @@ const ExpenseDetailCard = ({
     };
 
     try {
-      const res = await axios.patch("/patch-expense-amount", data); 
+      const res = await axios.patch("/patch-expense-amount", data);
       if (res?.data?.modifiedCount > 0) {
         await axios.post("/transaction", {
+          targetID: expenseItem._id,
           source: expenseItem.source,
           amount: amountDeduct,
           type: "Expense",
@@ -49,7 +50,10 @@ const ExpenseDetailCard = ({
         setModalOpen(false);
       } else {
         if (onExpenseUpdated) {
-          onExpenseUpdated({ _id: expenseItem._id, amount: expenseItem.amount });
+          onExpenseUpdated({
+            _id: expenseItem._id,
+            amount: expenseItem.amount,
+          });
         }
       }
     } catch (err) {

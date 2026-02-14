@@ -85,13 +85,13 @@ const SavingMoneyForm = ({
 
         <div>
           <label htmlFor="date" className="text-xs text-[#696868]">
-            Date
+            Target Date of completion
           </label>
           <input
             type="date"
             id="date"
             name="date"
-            defaultValue={editingSavings?.date || new Date() ||""}
+            defaultValue={editingSavings?.date || ""}
             className="input input-bordered w-full"
             required
           />

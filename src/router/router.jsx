@@ -13,6 +13,7 @@ import CategoryMakeAdmin from "../Component/CategoryMakeAdmin/CategoryMakeAdmin"
 import Income from "../Component/IncomeExpense/Income";
 import TransactionPage from "../Pages/Transaction/TransactionPage";
 import Expense from "../Component/IncomeExpense/Expense";
+import Savings from "../Component/IncomeExpense/Savings";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
           {
             path: "expense",
             element: <Expense />,
+          },
+          {
+            path: "savings",
+            element: <Savings />,
           },
         ],
       },
