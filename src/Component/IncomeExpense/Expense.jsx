@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Swal from "sweetalert2";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useExpenseHook from "../../hooks/useExpenseHook";
@@ -8,6 +8,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import PaginationComp from "../PaginationComp";
 import IncomeExpenseForm from "../FormComponent/IncomeExpenseForm";
 import ExpenseDetailCard from "../Card/ExpenseDetailCard";
+import toast from "react-hot-toast";
 
 const Expense = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,17 +36,42 @@ const Expense = () => {
   };
 
   const handleDelete = async (expenseItem) => {
-    try {
-      const resDelete = await axios.delete(
-        `/delete-expense/${expenseItem._id}`,
-      );
-      if (resDelete.data?.deletedCount > 0) {
-        setAllExpenses(
-          allExpenses.filter((item) => item._id !== expenseItem._id),
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This expense record will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const resDelete = await axios.delete(
+          `/delete-expense/${expenseItem._id}`,
         );
+
+        if (resDelete.data?.deletedCount > 0) {
+          setAllExpenses(
+            allExpenses.filter((item) => item._id !== expenseItem._id),
+          );
+
+          await Swal.fire({
+            title: "Deleted!",
+            text: "Expense deleted successfully.",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          title: "Error!",
+          text: err.response?.data?.message || "Failed to delete expense.",
+          icon: "error",
+        });
       }
-    } catch (err) {
-      console.error("Delete error:", err.response?.data || err.message);
     }
   };
 
@@ -83,7 +109,7 @@ const Expense = () => {
         }
         setEditingExpense(null);
       } catch (err) {
-        console.error("Edit error:", err.response?.data || err.message);
+        toast.error("Edit error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);
@@ -101,7 +127,7 @@ const Expense = () => {
           await axios.post("/transaction", expenseData);
         }
       } catch (err) {
-        console.error("Add expense error:", err.response?.data || err.message);
+        toast.error("Add expense error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);

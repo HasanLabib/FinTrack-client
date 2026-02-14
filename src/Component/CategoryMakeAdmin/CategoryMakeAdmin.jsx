@@ -5,6 +5,8 @@ import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import PaginationComp from "../PaginationComp";
+import toast from "react-hot-toast";
+import Loading from "../../utils/Loading";
 const CategoryMakeAdmin = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonText, setButtonText] = useState("Submit");
@@ -39,7 +41,7 @@ const CategoryMakeAdmin = () => {
         setAllCategory(afterDelete);
       }
     } catch (err) {
-      console.error("Delete error:", err.response?.data || err.message);
+      toast.error("Delete error:", err.response?.data || err.message);
     }
   };
   const handleSubmit = async (e) => {
@@ -97,7 +99,7 @@ const CategoryMakeAdmin = () => {
       </div>
 
       <div className="grow">
-        {categoryLoading && <p>Loading...</p>}
+        {categoryLoading && <Loading/>}
         {categoryError && <p className="text-red-500">Something went wrong</p>}
 
         <div className="flex flex-wrap gap-4">

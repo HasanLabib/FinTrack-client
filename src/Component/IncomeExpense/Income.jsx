@@ -8,6 +8,9 @@ import PaginationComp from "../PaginationComp";
 import IncomeExpenseForm from "../FormComponent/IncomeExpenseForm";
 import useGetAllCategory from "../../hooks/useGetAllCategory";
 import IncomeDetailCard from "../Card/IncomeDetailCard";
+import Swal from "sweetalert2";
+import Loading from "../../utils/Loading";
+import toast from "react-hot-toast";
 
 const Income = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,13 +38,40 @@ const Income = () => {
   };
 
   const handleDelete = async (incomeItem) => {
-    try {
-      const resDelete = await axios.delete(`/delete-income/${incomeItem._id}`);
-      if (resDelete.data?.deletedCount > 0) {
-        setAllIncome(allIncome.filter((item) => item._id !== incomeItem._id));
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This income record will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const resDelete = await axios.delete(
+          `/delete-income/${incomeItem._id}`,
+        );
+
+        if (resDelete.data?.deletedCount > 0) {
+          setAllIncome(allIncome.filter((item) => item._id !== incomeItem._id));
+
+          await Swal.fire({
+            title: "Deleted!",
+            text: "Income deleted successfully.",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          title: "Error!",
+          text: err.response?.data?.message || "Failed to delete income.",
+          icon: "error",
+        });
       }
-    } catch (err) {
-      console.error("Delete error:", err.response?.data || err.message);
     }
   };
 
@@ -79,7 +109,7 @@ const Income = () => {
         }
         setEditingIncome(null);
       } catch (err) {
-        console.error("Edit error:", err.response?.data || err.message);
+        toast.error("Edit error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);
@@ -97,7 +127,7 @@ const Income = () => {
           await axios.post("/transaction", incomeData);
         }
       } catch (err) {
-        console.error("Add income error:", err.response?.data || err.message);
+        toast.error("Add income error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);
@@ -115,6 +145,8 @@ const Income = () => {
     fetchIncome();
   }, [axios, moneyModified, page]);
 
+  if (incomeLoading && !allCategory) return <Loading />;
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-3rem)] w-full mt-12 px-4">
       <div className="flex justify-between items-center mb-6">
@@ -131,7 +163,7 @@ const Income = () => {
       </div>
 
       <div className="grow">
-        {incomeLoading && !allCategory && <p>Loading...</p>}
+        {incomeLoading && !allCategory && <Loading />}
         {/* {incomeError && <p className="text-red-500">Something went wrong</p>} */}
 
         <div className="flex flex-wrap gap-4">

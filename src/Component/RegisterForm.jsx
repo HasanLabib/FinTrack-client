@@ -3,6 +3,7 @@ import { FaEyeSlash } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import Register from "../Pages/Authentication/Register/Register";
 import { Link, useNavigate } from "react-router";
+import toast from "react-hot-toast";
 const RegisterForm = () => {
   const [photoValueState, setPhotoValueState] = useState({
     profile_photo: null,
@@ -57,7 +58,7 @@ const RegisterForm = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      console.error("Register failed:", error);
+      toast.error("Register failed:", error);
       setPasswordError(error.response?.data?.message || "Login failed");
       setButtonText("Register");
       setIsDisabled(false);

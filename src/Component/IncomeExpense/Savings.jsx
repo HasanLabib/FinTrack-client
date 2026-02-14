@@ -8,6 +8,9 @@ import PaginationComp from "../PaginationComp";
 import useGetAllCategory from "../../hooks/useGetAllCategory";
 import SavingDetailCard from "../Card/SavingDetailCard";
 import SavingMoneyForm from "../FormComponent/SavingMoneyForm";
+import Loading from "../../utils/Loading";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Savings = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,14 +38,44 @@ const Savings = () => {
     setModalOpen(true);
   };
 
+
   const handleDelete = async (savingItem) => {
-    try {
-      const resDelete = await axios.delete(`/delete-saving/${savingItem._id}`);
-      if (resDelete.data?.deletedCount > 0) {
-        setAllSavings(allSavings.filter((item) => item._id !== savingItem._id));
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to recover this saving!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const resDelete = await axios.delete(
+          `/delete-saving/${savingItem._id}`,
+        );
+
+        if (resDelete.data?.deletedCount > 0) {
+          setAllSavings(
+            allSavings.filter((item) => item._id !== savingItem._id),
+          );
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Saving has been deleted successfully.",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          title: "Error!",
+          text: err.response?.data?.message || "Something went wrong.",
+          icon: "error",
+        });
       }
-    } catch (err) {
-      console.error("Delete error:", err.response?.data || err.message);
     }
   };
 
@@ -79,7 +112,7 @@ const Savings = () => {
         }
         setEditingSaving(null);
       } catch (err) {
-        console.error("Edit error:", err.response?.data || err.message);
+        toast.error("Edit error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);
@@ -97,7 +130,7 @@ const Savings = () => {
           await axios.post("/transaction", savingData);
         }
       } catch (err) {
-        console.error("Add saving error:", err.response?.data || err.message);
+        toast.error("Add saving error:", err.response?.data || err.message);
       } finally {
         setButtonText("Submit");
         setIsDisabled(false);
@@ -131,7 +164,7 @@ const Savings = () => {
       </div>
 
       <div className="grow">
-        {savingsLoading && !allCategory && <p>Loading...</p>}
+        {savingsLoading && !allCategory && <Loading />}
         {/* {savingsError && <p className="text-red-500">Something went wrong</p>} */}
 
         <div className="flex flex-wrap gap-4">

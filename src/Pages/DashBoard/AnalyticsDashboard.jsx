@@ -26,6 +26,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import useAnalytics from "../../hooks/useAnalytics";
 import useRecentTransactions from "../../hooks/useRecentTransactions";
 import { Link } from "react-router";
+import Loading from "../../utils/Loading";
 
 ChartJS.register(
   CategoryScale,
@@ -59,11 +60,7 @@ const AnalyticsDashboard = ({ year = new Date().getFullYear() }) => {
   } = useAnalytics(year);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        Loading analytics...
-      </div>
-    );
+    return <Loading />;
   }
 
   const colorPalette = [

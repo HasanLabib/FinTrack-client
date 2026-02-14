@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosSecure from "./useAxiosSecure";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const useTransactionHookAdmin = () => {
   const axios = useAxiosSecure();
@@ -52,7 +53,7 @@ const useTransactionHookAdmin = () => {
       );
       return res.data;
     } catch (err) {
-      console.error(err);
+      toast.error(err);
     }
   };
 

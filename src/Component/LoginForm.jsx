@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router";
+import toast from "react-hot-toast";
 const LoginForm = () => {
   const { signInUser, user } = useAuth();
   const [passwordError, setPasswordError] = useState("");
@@ -32,7 +33,7 @@ const LoginForm = () => {
       // console.log("Login success:", response);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Login failed:", error);
+      toast.error("Login failed:", error);
       setPasswordError(error.response?.data?.message || "Login failed");
       setButtonText("Login");
       setIsDisabled(false);

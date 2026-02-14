@@ -1,6 +1,7 @@
 // hooks/useRecentTransactions.js
 import { useState, useEffect } from "react";
 import useAxiosSecure from "./useAxiosSecure"; // assuming you already have this
+import toast from "react-hot-toast";
 
 const useRecentTransactions = () => {
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -20,7 +21,7 @@ const useRecentTransactions = () => {
         const recentTransactions = res.data;
         setRecentTransactions(recentTransactions);
       } catch (err) {
-        console.error("Failed to fetch recent transactions:", err);
+        toast.error("Failed to fetch recent transactions:", err);
         setRecentTransactionsError(
           err?.response?.data?.error || "Failed to load recent transactions",
         );

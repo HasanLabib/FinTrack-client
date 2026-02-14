@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import AddMoneyForm from "../FormComponent/AddMoneyForm";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const SavingDetailCard = ({
   savingItem,
@@ -80,7 +81,7 @@ const SavingDetailCard = ({
         }
       }
     } catch (err) {
-      console.error(err);
+      toast.error(err);
       if (onSavingUpdated) {
         onSavingUpdated({ _id: savingItem._id, amount: savingItem.amount });
       }

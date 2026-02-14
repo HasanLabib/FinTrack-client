@@ -4,6 +4,7 @@ import { MdDelete } from "react-icons/md";
 import AddMoneyForm from "../FormComponent/AddMoneyForm";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const IncomeDetailCard = ({
   incomeItem,
@@ -53,7 +54,7 @@ const IncomeDetailCard = ({
         }
       }
     } catch (err) {
-      console.error(err);
+      toast.error(err);
       if (onIncomeUpdated) {
         onIncomeUpdated({ _id: incomeItem._id, amount: incomeItem.amount });
       }

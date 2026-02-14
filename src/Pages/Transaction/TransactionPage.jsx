@@ -6,6 +6,7 @@ import EditTransactionForm from "../../Component/FormComponent/EditTransactionFo
 import useGetAllCategory from "../../hooks/useGetAllCategory";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import Loading from "../../utils/Loading";
 
 const TransactionPage = () => {
   const {
@@ -48,7 +49,7 @@ const TransactionPage = () => {
     return () => clearTimeout(handleSearch);
   }, [localSearch, setSearch, setPage]);
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading) return <Loading />;
 
   return (
     <div className="p-6 mt-10 w-full bg-white rounded-xl shadow-md">

@@ -6,6 +6,7 @@ import {
 import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../../Firebase/firebase.config";
 import useAxios from "../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext();
 
@@ -59,7 +60,7 @@ const AuthProvider = ({ children }) => {
       setUser(null);
       setUserLoading(false);
     } catch (error) {
-      console.error("Logout failed:", error);
+      toast.error("Logout failed:", error);
       setUserLoading(false);
     }
   };
