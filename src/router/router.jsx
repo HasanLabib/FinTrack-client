@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import App from "../App";
 import Layout from "../Layout/Layout";
 import Register from "../Pages/Authentication/Register/Register";
@@ -20,18 +20,17 @@ import AnalyticsDashboard from "../Pages/DashBoard/AnalyticsDashboard";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
+    element: <Layout />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="/login" replace />,
+      },
       {
         path: "/register",
         element: <Register />,
       },
       {
-        index: true,
         path: "/login",
         element: <Login />,
       },
