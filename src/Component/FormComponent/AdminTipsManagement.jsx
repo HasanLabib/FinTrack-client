@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useAdminTips from "../../hooks/useAdminTips";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Loading from "../../utils/Loading";
@@ -15,8 +14,6 @@ const AdminTipsManagement = () => {
   const [buttonText, setButtonText] = useState("Submit");
   const [isDisable, setIsDisabled] = useState(false);
   const [editingTip, setEditingTip] = useState(null);
-
-  const axios = useAxiosSecure();
 
   const handleEdit = (tip) => {
     setEditingTip(tip);
@@ -87,7 +84,7 @@ const AdminTipsManagement = () => {
 
   useEffect(() => {
     fetchTips();
-  }, [fetchTips]);
+  }, []);
 
   if (loading) return <Loading />;
 

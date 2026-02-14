@@ -170,7 +170,7 @@ const useAnalytics = (year = new Date().getFullYear()) => {
       const monthlyRatiosArray = monthlyIncomeTotalsArray.map(
         (income, index) => {
           const expense = monthlyExpenseTotalsArray[index];
-          return expense > 0 ? (income / expense).toFixed(2) : 0;
+          return expense > 0 ? +(income / expense).toFixed(2) : 0;
         },
       );
 
@@ -389,6 +389,8 @@ const useAnalytics = (year = new Date().getFullYear()) => {
     monthlyIncomeExpenseRatioLineData,
     financialSummaryData,
     isLoading,
+    insights,
+    featuredTips,
   };
 };
 

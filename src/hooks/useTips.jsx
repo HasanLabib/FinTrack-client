@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useAxiosSecure from "./useAxiosSecure"; // Reuse secure axios if needed, but /tips is public
+import toast from "react-hot-toast";
 const useTips = () => {
   const [tips, setTips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,19 +9,18 @@ const useTips = () => {
   useEffect(() => {
     const fetchTips = async () => {
       try {
-        const response = await axios("/tips");
-        if (!response.ok) throw new Error("Failed to fetch tips");
-        const data = await response.json();
-        setTips(data);
+        const res = await axios.get("/tips");
+        console.log(res);
+        setTips(res.data);
       } catch (err) {
-        console.error(err);
+        toast.error(err);
         setError("Failed to load tips.");
       } finally {
         setLoading(false);
       }
     };
     fetchTips();
-  }, []);
+  }, [axios]);
 
   return { tips, loading, error };
 };

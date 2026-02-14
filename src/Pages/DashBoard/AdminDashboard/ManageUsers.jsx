@@ -67,7 +67,7 @@ const ManageUsers = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
-                {user.role !== "decorator" ? (
+                {user?.role !== "admin" ? (
                   <button
                     className="btn btn-xs btn-success"
                     onClick={() => makeAdmin(user.email)}

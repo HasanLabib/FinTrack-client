@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
 
     const res = await axios.post("/login", { email, password });
     const { firebaseToken, user: backendUser } = res.data;
-   // console.log(backendUser);
+    // console.log(backendUser);
     const userCredential = await signInWithCustomToken(auth, firebaseToken);
     const firebaseUser = auth.currentUser;
 
@@ -68,7 +68,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const res = await axios(`/users/${firebaseUser.email}`);
+        const res = await axios.get(`/users/${firebaseUser.email}`);
         const backendUser = res.data;
 
         setUser({

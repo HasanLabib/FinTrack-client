@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useAdminAnalytics from "../../hooks/useAdminAnalytics";
-import useTips from "../../hooks/useTips"; // you'll create this
 import Loading from "../../utils/Loading";
+import useAdminTips from "../../hooks/useAdminTips";
 const colorPalette = [
   "#FF6384",
   "#36A2EB",
@@ -33,14 +33,11 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
     savingsBySourceBarData,
     monthlyIncomeExpenseRatioLineData,
     financialSummaryData,
-    insights,
-    totalUsers,
-    totalTransactions,
     isLoading,
+    insights,
   } = useAdminAnalytics(year);
 
-  const { tips, loading: tipsLoading, error: tipsError } = useTips();
-  console.log("h");
+  const { tips, loading } = useAdminTips();
 
   if (isLoading) return <Loading />;
 
@@ -66,35 +63,27 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
-          <h3 className="text-lg">Total Users</h3>
-          <p className="text-4xl font-bold">{totalUsers}</p>
-        </div>
-        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
-          <h3 className="text-lg">Total Transactions</h3>
-          <p className="text-4xl font-bold">{totalTransactions}</p>
-        </div>
-        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
-          <h3 className="text-lg">Yearly Income</h3>
-          <p className="text-4xl font-bold text-green-600">
+        <div className="bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg text-white">Yearly Income</h3>
+          <p className="text-4xl font-bold text-white">
             ${financialSummaryData.yearlyIncome.toFixed(2)}
           </p>
         </div>
-        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
-          <h3 className="text-lg">Yearly Expenses</h3>
-          <p className="text-4xl font-bold text-red-600">
+        <div className="bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg text-white">Yearly Expenses</h3>
+          <p className="text-4xl font-bold text-white">
             ${financialSummaryData.yearlyExpense.toFixed(2)}
           </p>
         </div>
-        <div className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow">
-          <h3 className="text-lg">Yearly Savings</h3>
-          <p className="text-4xl font-bold text-emerald-600">
+        <div className="bg-[#201F24] p-6 rounded-2xl shadow">
+          <h3 className="text-lg text-white">Yearly Savings</h3>
+          <p className="text-4xl font-bold text-white">
             ${financialSummaryData.yearlySavings.toFixed(2)}
           </p>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-8 rounded-3xl">
+      <div className="bg-linear-to-r from-indigo-500 to-purple-600 text-white p-8 rounded-3xl">
         <h2 className="text-2xl font-bold mb-4">Smart Financial Insights</h2>
         <ul className="space-y-3 text-lg">
           {insights.map((insight, i) => (
@@ -367,29 +356,24 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold mb-6">Featured Financial Tips</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {!tipsLoading && !tipsError && (
-            <div>
-              <h2 className="text-2xl font-bold mb-6">
-                Featured Financial Tips
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {tips.map((tip) => (
-                  <div
-                    key={tip._id}
-                    className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow"
-                  >
-                    <h3 className="font-semibold text-lg">{tip.title}</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mt-2">
-                      {tip.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
+        {!loading && (
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Featured Financial Tips</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {tips.map((tip) => (
+                <div
+                  key={tip._id}
+                  className="bg-white dark:bg-[#201F24] p-6 rounded-2xl shadow"
+                >
+                  <h3 className="font-semibold text-lg">{tip.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mt-2">
+                    {tip.description}
+                  </p>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

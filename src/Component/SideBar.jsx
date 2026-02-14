@@ -22,7 +22,7 @@ const SideBar = () => {
       : ["Overview", "Income", "Expense", "Savings", "Transaction"];
   const iconItems =
     user?.role === "admin"
-      ? [iconOverView, "", "", "", iconTransac]
+      ? [iconOverView, "a", "a", "a", iconTransac]
       : [iconOverView, iconIncome, iconExpense, iconSaving, iconTransac];
   const dashBoard = user?.role === "admin" ? "adminDashboard" : "userDashboard";
   const handleLogout = () => {
