@@ -27,6 +27,7 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
+        index: true,
         path: "/login",
         element: <Login />,
       },
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
         element: <UserDashBoard />,
         children: [
           {
+            index: true,
             path: "overview",
             element: <AnalyticsDashboard />,
           },
