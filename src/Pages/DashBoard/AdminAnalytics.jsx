@@ -40,6 +40,7 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
   } = useAdminAnalytics(year);
 
   const { tips } = useTips();
+  console.log("h")
 
   if (isLoading) return <Loading />;
 
@@ -109,6 +110,7 @@ const AdminAnalytics = ({ year = new Date().getFullYear() }) => {
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-semibold mb-5">
             Income vs Expense Comparison
+
           </h2>
           <div style={chartContainerStyles}>
             <Bar
