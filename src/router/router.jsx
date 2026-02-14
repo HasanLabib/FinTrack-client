@@ -20,7 +20,11 @@ import AnalyticsDashboard from "../Pages/DashBoard/AnalyticsDashboard";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/register",

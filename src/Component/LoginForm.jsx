@@ -8,6 +8,7 @@ const LoginForm = () => {
   const [buttonText, setButtonText] = useState("Login");
   const [isDisable, setIsDisabled] = useState(false);
   const navigate = useNavigate();
+  if (user) navigate("/dashboard");
   const handleLogin = async (e) => {
     e.preventDefault();
     setButtonText("Logging In...!");
@@ -28,7 +29,7 @@ const LoginForm = () => {
 
     try {
       const response = await signInUser({ email, password });
-     // console.log("Login success:", response);
+      // console.log("Login success:", response);
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
